@@ -18,10 +18,6 @@
 extern IMGUI_IMPL_API LRESULT
     ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-struct TransformationMatrix {
-	Matrix4x4 WVP;
-	/*Matrix4x4 World;*/
-};
 
 struct Vector3 {
 	float x;
@@ -38,6 +34,11 @@ struct Vector4 {
 
 struct Matrix4x4 {
 	float m[4][4];
+};
+
+struct TransformationMatrix {
+	Matrix4x4 WVP;
+	/*Matrix4x4 World;*/
 };
 
 struct Transform {
@@ -622,6 +623,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
+	descriptorRangeForInstancing[0].BaseShaderRegister = 0;
+	descriptorRangeForInstancing[0].NumDescriptors=1;
+	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart =
+	    D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
